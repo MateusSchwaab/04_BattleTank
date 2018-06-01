@@ -22,7 +22,6 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("Tick component ticking"))
 		AimTowardsCrosshair();
 }
 
@@ -40,7 +39,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 			if (GetSightRayHitLocation(OutHitLocation))
 	{
-			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *OutHitLocation.ToString())
+			//UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *OutHitLocation.ToString())
 
 		}
 			else
@@ -53,7 +52,33 @@ void ATankPlayerController::AimTowardsCrosshair()
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
 	
-	OutHitLocation = FVector(1.0);
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	FVector2D ScreenLocation;
+
+	ScreenLocation.Set(ViewportSizeX*CrossHairXLocation, ViewportSizeY*CrossHairYLocation);
+	FVector LookDirection;
+	if (GetLookDirection(ScreenLocation, LookDirection))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Direction is: %s"), *LookDirection.ToString())
+	}
+	
 
 	return true;
 }
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+	FVector CameraWorldLocation;
+
+
+	return DeprojectScreenPositionToWorld(ScreenLocation.X,
+		ScreenLocation.Y,
+		CameraWorldLocation,
+		LookDirection);
+	
+}
+
+
+	
