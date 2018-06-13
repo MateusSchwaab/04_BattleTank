@@ -20,7 +20,6 @@ void ATank::BeginPlay()
 }
 
 
-
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -32,6 +31,11 @@ void ATank::AimAt(FVector OutHitLocation)
 {
 
 	TankAimingComponent->AimAt(OutHitLocation, LaunchSpeed);
+}
+
+void ATank::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Firing"))
 }
 
 
