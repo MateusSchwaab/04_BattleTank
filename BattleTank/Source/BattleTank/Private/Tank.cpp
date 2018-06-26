@@ -6,6 +6,7 @@
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/Components/SceneComponent.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -14,6 +15,8 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("MovementComponent"));
+
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +43,6 @@ void ATank::AimAt(FVector OutHitLocation)
 void ATank::Fire()
 {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSecounds;
-	UE_LOG(LogTemp, Warning, TEXT("Firing"))
 
 		if (Barrel && isReloaded) {
 
