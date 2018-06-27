@@ -14,18 +14,19 @@ void ATankAIController::BeginPlay()
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	Super::Tick(DeltaTime);
+	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	auto ControlledTank = Cast<ATank>(GetPawn());
 	auto PlayerLocation = PlayerTank->GetActorLocation();
 
 	if (PlayerTank)
 	{
+		MoveToActor(PlayerTank, AcceptanceRadius);
+
+
 		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 
 
 		ControlledTank->Fire();
 	}
 }
-
