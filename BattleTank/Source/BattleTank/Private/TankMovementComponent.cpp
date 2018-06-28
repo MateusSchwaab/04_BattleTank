@@ -4,6 +4,7 @@
 #include "Tank.h"
 #include "Engine/World.h" 
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Core/Public/Math/Vector.h"
 #include "TankTrack.h"
 
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
@@ -32,9 +33,12 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	auto ControlledTank = GetOwner()->GetName();
-	auto MoveVelocityString = MoveVelocity.ToString();
-	UE_LOG(LogTemp, Warning, TEXT("Tank %s moving to: %s"), *ControlledTank, *MoveVelocityString)
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	
+	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
+
+	IntendMoveForward(ForwardThrow);
 }
 
 
