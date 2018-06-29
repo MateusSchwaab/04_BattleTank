@@ -24,6 +24,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
 }
 
 
