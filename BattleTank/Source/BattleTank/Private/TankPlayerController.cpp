@@ -13,16 +13,10 @@ void ATankPlayerController::BeginPlay()
 	Super::BeginPlay();
 	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
 
-	if (AimingComponent)
-	{
-		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ARDA: Aiming Component missing on PlayerController at BeginPlay"));
-	}
-	
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 
+	
 }
 
 
