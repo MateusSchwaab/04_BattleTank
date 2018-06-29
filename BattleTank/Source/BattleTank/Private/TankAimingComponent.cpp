@@ -29,6 +29,7 @@ void UTankAimingComponent::BeginPlay()
 }
 
 
+
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -45,7 +46,7 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret * Tu
 
 }
 
-void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector OutHitLocation)
 {
 	if (!ensure(Barrel)) { return; }
 	FVector OutLaunchVelocity;
