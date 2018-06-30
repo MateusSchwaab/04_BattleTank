@@ -5,6 +5,7 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
+#include "Runtime/Core/Public/Math/Vector.h"
 #include  "Runtime/Engine/Classes/Engine/World.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
@@ -32,13 +33,35 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	if (bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSecounds)
+	auto ForwardVector = Barrel->GetForwardVector();
+	if (bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSecounds)
 	{
 		FiringState = EFiringState::Reloading;
 	}
+	else if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
+
 }
 
-
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	auto ForwardVector = Barrel->GetForwardVector();
+	if (!AimDirection.Equals(ForwardVector, 0.1))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret * TurretToSet)
@@ -61,7 +84,7 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation)
 
 	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, OutHitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
 		MoveBarrel(AimDirection);
 	}

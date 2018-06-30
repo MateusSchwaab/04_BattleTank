@@ -37,7 +37,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringState FiringState = EFiringState::Locked;
+		EFiringState FiringState = EFiringState::Reloading;
 
 public:	
 	
@@ -64,6 +64,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float ReloadTimeInSecounds = 3;
 
+	bool IsBarrelMoving();
+
 	double LastFireTime = 0;
 	
 	void MoveBarrel(FVector AimDirection);
@@ -74,5 +76,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	FVector AimDirection;
 
 };
